@@ -20,8 +20,21 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        mTrueButton = (Button) findViewById(R.id.true_button);
+        mTrueButton = (Button) findViewById(R.id.true_button);//Метод получает идентификатор ресурса виджета и возвращает объект View
+        mTrueButton.setOnClickListener(new View.OnClickListener() {//слушатель
+            @Override
+            public void onClick(View v) {
+                // Пока ничего не делает, но скоро будет!
+            }
+        });
+
         mFalseButton = (Button) findViewById(R.id.false_button);
+        mFalseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Пока ничего не делает, но скоро будет!
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
