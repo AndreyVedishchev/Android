@@ -25,6 +25,21 @@ public class QuizActivity extends AppCompatActivity {
             new Question(R.string.question_asia, true),
     };
 
+    private void updateQuestion() {
+        int question = mQuestionBank[mCurrentIndex].getTextResId();
+        mQuestionTextView.setText(question);
+    }
+
+    private void checkAnswer(boolean userPressedTrue) {
+        boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+        int messageResId = 0;
+        if (userPressedTrue == answerIsTrue) {
+            messageResId = R.string.correct_toast;
+        } else {
+            messageResId = R.string.incorrect_toast;
+        }
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +47,15 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
-        int question = mQuestionBank[mCurrentIndex].getTextResID();
-        mQuestionTextView.setText(question);
 
         mTrueButton = (Button) findViewById(R.id.true_button);//Метод получает идентификатор ресурса виджета и возвращает объект View
         mTrueButton.setOnClickListener(new View.OnClickListener() {//слушатель
             @Override
             public void onClick(View v) {
-                Toast.makeText(QuizActivity.this,  //информация для класса Toast, где искать идентификатор ресурса строки
-                        R.string.incorrect_toast,  //передается идентификатор ресурса строки
-                        Toast.LENGTH_SHORT).show();// время отображения сообщения
+//                Toast.makeText(QuizActivity.this,  //информация для класса Toast, где искать идентификатор ресурса строки
+//                        R.string.incorrect_toast,  //передается идентификатор ресурса строки
+//                        Toast.LENGTH_SHORT).show();// время отображения сообщения
+                updateQuestion();
             }
         });
 
@@ -49,23 +63,20 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(QuizActivity.this, //this означает View.OnClickListener
-                        R.string.correct_toast,
-                        Toast.LENGTH_SHORT).show();
+                updateQuestion();
             }
         });
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        mNextButton = (Button)findViewById(R.id.next_button);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateQuestion();
+            }
+        });
+
+        updateQuestion();
     }
 
     @Override
