@@ -1,5 +1,7 @@
 package com.example.geoquiz;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,13 +15,21 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
+    public static final String EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true";
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+
+    public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
+        Intent i = new Intent(packageContext, CheatActivity.class);
+        i.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+        return i;
+    }
 
     private Button mTrueButton;
     private Button mFalseButton;
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
+    private Button mCheatButton;
     private TextView mQuestionTextView;
     private int mCurrentIndex = 0;
 
@@ -98,6 +108,20 @@ public class QuizActivity extends AppCompatActivity {
                 if (mCurrentIndex > 0)
                 mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Запуск CheatActivity
+                //Intent i = new Intent(QuizActivity.this, CheatActivity.class);
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].
+                        isAnswerTrue();
+                Intent i = CheatActivity.newIntent(QuizActivity.this,
+                        answerIsTrue);
+                startActivity(i);
             }
         });
 
